@@ -17,8 +17,9 @@
             android:id="@+id/imageButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="#FF9800"
+            android:backgroundTint="#D3D3D3"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+            app:srcCompat="@drawable/ic_bar"
+            android:contentDescription="TODO" />
     </androidx.cardview.widget.CardView>
 </LinearLayout>
