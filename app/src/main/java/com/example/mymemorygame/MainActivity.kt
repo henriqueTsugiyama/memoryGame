@@ -1,10 +1,13 @@
 package com.example.mymemorygame
 
+import android.animation.ArgbEvaluator
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymemorygame.models.BoardSize
@@ -36,7 +39,8 @@ class MainActivity : AppCompatActivity() {
         tvNumMoves = findViewById(R.id.tvNumMoves)
         tvNumPairs = findViewById(R.id.tvNumPairs)
 
-        //setting up parameters for game creation on adapter and layout manager
+        //setting up parameters for game creation on adapter and layout manager]
+        tvNumPairs.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
         memoryGame = MemoryGame(boardSize)
         adapter = MemoryBoardAdapter(this, boardSize, memoryGame.cards, object : MemoryBoardAdapter.CardClickListener {
             override fun onCardClick(position: Int) {
@@ -55,15 +59,21 @@ class MainActivity : AppCompatActivity() {
             return
         }
         if( memoryGame.isCardFacedUp(position)) {
-            Snackbar.make(clRoot, "Invalid move!",Snackbar.LENGTH_LONG).show()
+            Snackbar.make(clRoot, "Invalid move!",Snackbar.LENGTH_SHORT).show()
             return
         }
         //card flip over
         if(memoryGame.flipCard(position)) {
-          //  Snackbar.make(clRoot, "You've found a match", Snackbar.LENGTH_LONG).show()
-            Log.i(TAG, " You've found a match. Pairs found: ${memoryGame.numOfPairsFound}")
-            //return
+            val color = ArgbEvaluator().evaluate(
+                    memoryGame.numOfPairsFound.toFloat()/ boardSize.getNumPairs(),
+                    ContextCompat.getColor(this, R.color.color_progress_none),
+                    ContextCompat.getColor(this, R.color.color_progress_full)
+            ) as Int
+            tvNumPairs.setTextColor(color)
+            tvNumPairs.text = "Pairs: ${memoryGame.numOfPairsFound}/${boardSize.getNumPairs()} "
+            if (memoryGame.haveWon()) Snackbar.make(clRoot, "You've won!!", Snackbar.LENGTH_LONG).show();
         }
+        tvNumMoves.text = "Moves: ${memoryGame.getNumMoves()}"
         adapter.notifyDataSetChanged()
 
     }

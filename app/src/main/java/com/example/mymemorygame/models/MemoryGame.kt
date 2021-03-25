@@ -5,7 +5,9 @@ import com.example.mymemorygame.utils.DEFAULT_ICONS
 class MemoryGame (private val boardSize: BoardSize){
     val cards: List<MemoryCard>
     var numOfPairsFound = 0
+
     private var indexOfSelectedCard: Int? = null
+    private var numOfCardsFlipped: Int = 0
     init {
         val chosenImages = DEFAULT_ICONS.shuffled().take(boardSize.getNumPairs())
         var randomizedImages = (chosenImages + chosenImages).shuffled()
@@ -13,6 +15,7 @@ class MemoryGame (private val boardSize: BoardSize){
     }
 
     fun flipCard(position: Int) : Boolean {
+        numOfCardsFlipped++
         var card = cards[position]
         // 0 card faced up => flip over selected card
         //1 card faced up => flip over selected card + check if they matched
@@ -52,6 +55,10 @@ class MemoryGame (private val boardSize: BoardSize){
 
     fun isCardFacedUp(position: Int): Boolean {
         return cards[position].isFaceUp
+    }
+
+    fun getNumMoves(): Int {
+        return numOfCardsFlipped/2
     }
 
 
