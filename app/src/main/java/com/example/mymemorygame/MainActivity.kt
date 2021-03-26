@@ -5,6 +5,9 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -15,6 +18,7 @@ import com.example.mymemorygame.models.MemoryCard
 import com.example.mymemorygame.models.MemoryGame
 import com.example.mymemorygame.utils.DEFAULT_ICONS
 import com.google.android.material.snackbar.Snackbar
+import java.util.zip.Inflater
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -40,6 +44,23 @@ class MainActivity : AppCompatActivity() {
         tvNumPairs = findViewById(R.id.tvNumPairs)
 
         //setting up parameters for game creation on adapter and layout manager]
+        createBoard()
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.mi_refresh -> createBoard()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun createBoard() {
         tvNumPairs.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
         memoryGame = MemoryGame(boardSize)
         adapter = MemoryBoardAdapter(this, boardSize, memoryGame.cards, object : MemoryBoardAdapter.CardClickListener {
