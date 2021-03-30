@@ -1,7 +1,6 @@
-package com.example.mymemorygame
+package com.example.mymemorygame.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mymemorygame.R
 import com.example.mymemorygame.models.BoardSize
 import com.example.mymemorygame.models.MemoryCard
 import kotlin.math.min

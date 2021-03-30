@@ -1,10 +1,9 @@
 package com.example.mymemorygame
 
 import android.animation.ArgbEvaluator
-import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -13,16 +12,17 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mymemorygame.activities.CreateGameActivity
+import com.example.mymemorygame.adapters.MemoryBoardAdapter
 import com.example.mymemorygame.models.BoardSize
-import com.example.mymemorygame.models.MemoryCard
 import com.example.mymemorygame.models.MemoryGame
-import com.example.mymemorygame.utils.DEFAULT_ICONS
 import com.google.android.material.snackbar.Snackbar
-import java.util.zip.Inflater
+import com.example.mymemorygame.utils.EXTRA_BOARD_SIZE
 
 class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity"
+        private const val ACTIVITY_CODE = 573
     }
     private lateinit var memoryGame: MemoryGame
     private lateinit var rvBoard: RecyclerView
@@ -43,6 +43,9 @@ class MainActivity : AppCompatActivity() {
         tvNumMoves = findViewById(R.id.tvNumMoves)
         tvNumPairs = findViewById(R.id.tvNumPairs)
 
+        val intent = Intent(this, CreateGameActivity::class.java)
+        intent.putExtra(EXTRA_BOARD_SIZE, BoardSize.MEDIUM)
+        startActivity(intent)
         //setting up parameters for game creation on adapter and layout manager]
         createBoard()
     }
@@ -70,8 +73,29 @@ class MainActivity : AppCompatActivity() {
                 showNewSizeDialog()
                 return true
             }
+            R.id.mi_create_game -> {
+                showCreateGameDialog()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+    private fun showCreateGameDialog () {
+        val boardSizeView = LayoutInflater.from(this).inflate(R.layout.dialog_board_size, null)
+        val radioGroupSize = boardSizeView.findViewById<RadioGroup>(R.id.radioGroup)
+
+        showAlertDialog("Create your own game", boardSizeView, View.OnClickListener {
+            //set new board size difficulty
+            val desiredBoardSize = when(radioGroupSize.checkedRadioButtonId){
+                R.id.rbEasy -> BoardSize.EASY
+                R.id.rbMedium -> BoardSize.MEDIUM
+                else -> BoardSize.HARD
+            }
+            //navigate to a new screen
+            val intent = Intent(this, CreateGameActivity::class.java)
+            intent.putExtra(EXTRA_BOARD_SIZE, desiredBoardSize)
+            startActivityForResult(intent, ACTIVITY_CODE)
+        })
     }
 
     private fun showNewSizeDialog() {
@@ -83,7 +107,6 @@ class MainActivity : AppCompatActivity() {
             BoardSize.MEDIUM -> radioGroupSize.check(R.id.rbMedium)
             BoardSize.HARD -> radioGroupSize.check(R.id.rbHard)
         }
-
         showAlertDialog("Choose new board size", boardSizeView, View.OnClickListener {
             //set new board size difficulty
             boardSize = when(radioGroupSize.checkedRadioButtonId){
