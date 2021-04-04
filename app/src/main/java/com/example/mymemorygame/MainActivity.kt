@@ -1,6 +1,7 @@
 package com.example.mymemorygame
 
 import android.animation.ArgbEvaluator
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvNumPairs: TextView
     private lateinit var adapter: MemoryBoardAdapter
     private lateinit var clRoot: ConstraintLayout
-    private var boardSize: BoardSize = BoardSize.EASY
+    private var boardSize: BoardSize = BoardSize.MEDIUM
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +43,6 @@ class MainActivity : AppCompatActivity() {
         rvBoard = findViewById(R.id.rvBoard)
         tvNumMoves = findViewById(R.id.tvNumMoves)
         tvNumPairs = findViewById(R.id.tvNumPairs)
-
-        val intent = Intent(this, CreateGameActivity::class.java)
-        intent.putExtra(EXTRA_BOARD_SIZE, BoardSize.MEDIUM)
-        startActivity(intent)
         //setting up parameters for game creation on adapter and layout manager]
         createBoard()
     }
@@ -80,6 +77,14 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+   /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == ACTIVITY_CODE && resultCode == Activity.RESULT_OK){
+            val customGameName = data?.getStringExtra(NAME)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }*/
+
     private fun showCreateGameDialog () {
         val boardSizeView = LayoutInflater.from(this).inflate(R.layout.dialog_board_size, null)
         val radioGroupSize = boardSizeView.findViewById<RadioGroup>(R.id.radioGroup)
