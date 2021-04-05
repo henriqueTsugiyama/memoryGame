@@ -10,5 +10,12 @@
     <item
         android:id="@+id/mi_new_size"
         android:icon="@drawable/ic_difficulty"
-        android:title="Choose difficulty" />
+        android:title="Choose difficulty" ></item>
+    <item
+        android:id="@+id/mi_create_game"
+        android:title="Create custom game"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/mi_download_game"
+        android:title="Download custom game" />
 </menu>

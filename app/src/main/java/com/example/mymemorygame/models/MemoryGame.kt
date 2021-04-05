@@ -2,16 +2,25 @@ package com.example.mymemorygame.models
 
 import com.example.mymemorygame.utils.DEFAULT_ICONS
 
-class MemoryGame (private val boardSize: BoardSize){
+class MemoryGame (
+        private val boardSize: BoardSize,
+        customImgList: List<String>?
+){
     val cards: List<MemoryCard>
     var numOfPairsFound = 0
 
     private var indexOfSelectedCard: Int? = null
     private var numOfCardsFlipped: Int = 0
     init {
-        val chosenImages = DEFAULT_ICONS.shuffled().take(boardSize.getNumPairs())
-        var randomizedImages = (chosenImages + chosenImages).shuffled()
-        cards = randomizedImages.map { MemoryCard(it) }
+        if (customImgList == null) {
+            val chosenImages = DEFAULT_ICONS.shuffled().take(boardSize.getNumPairs())
+            var randomizedImages = (chosenImages + chosenImages).shuffled()
+            cards = randomizedImages.map { MemoryCard(it) }
+        } else {
+            val randomizedCustomImgs = (customImgList + customImgList).shuffled()
+            cards = randomizedCustomImgs.map { MemoryCard(it.hashCode(), it) }
+
+        }
     }
 
     fun flipCard(position: Int) : Boolean {
